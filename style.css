@@ -4,7 +4,7 @@ html { font-size: 62.5%; scroll-behavior: smooth; -webkit-font-smoothing: antial
 
 body {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   line-height: 1.7;
   color: #e0e1e6; /* Testo principale chiaro (quasi bianco) */
   background-color: #121212; /* Sfondo MOLTO scuro, quasi nero */
@@ -92,7 +92,7 @@ ol li, ul li { margin-bottom: 1rem; }
   box-shadow: 0 2px 15px rgba(0,0,0,0.3);
 }
 .header-content { display: flex; flex-direction: column; align-items: center; }
-.logo-image { width: 120px; margin-bottom: 1.5rem; }
+.logo-image { width: 150px; margin-bottom: 1.5rem; }
 .animated-logo { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .animated-logo:hover { transform: scale(1.1) rotate(-5deg); }
 
@@ -204,7 +204,7 @@ ol li, ul li { margin-bottom: 1rem; }
 /* DOWNLOAD (TESTFLIGHT) & SOCIAL SECTIONS */
 .testflight-instructions {
   background-color: rgba(40,40,42, 0.7);
-  padding: 2.5rem; border-radius: 15px; margin: 3rem auto; max-width: 600px;
+  padding: 3.0rem; border-radius: 15px; margin: 3rem auto; max-width: 600px;
   border: 1px solid rgba(255,255,255,0.1);
 }
 .testflight-instructions p strong { color: #fde8b0; }
