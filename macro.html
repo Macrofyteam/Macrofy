@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Macrofy - Calcolo PRO dei Tuoi Macro</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="icon" href="favicon.png" type="image/png">
+
+  <style>
+    /* @font-face per Grobold (DA ABILITARE SE HAI I FILE FONT) */
+    /*
+    @font-face {
+      font-family: 'Grobold';
+      src: url('fonts/grobold.woff2') format('woff2'),
+           url('fonts/grobold.woff') format('woff');
+      font-weight: bold;
+      font-style: normal;
+      font-display: swap;
+    }
+    */
+
+    /* Stili Base & Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 62.5%; /* 1rem = 10px */ }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.6rem; /* 16px */
+      line-height: 1.6;
+      background-color: #1a1a1a; 
+      color: #e0e0e0; 
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden; 
+    }
+
+    /* Contenitore Principale del Calcolatore */
+    .calculator-wrapper {
+      background: rgba(40, 40, 40, 0.85); 
+      backdrop-filter: blur(10px); 
+      -webkit-backdrop-filter: blur(10px);
+      padding: 3rem 3.5rem;
+      border-radius: 25px;
+      max-width: 750px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1); 
+      border: 1px solid rgba(255,255,255,0.15); 
+      transform-style: preserve-3d; 
+    }
+
+    .calculator-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative; 
+    }
+    .calculator-header::before { 
+        content: '';
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(90deg, #ff4d4d, #fde8b0);
+        margin: 0 auto 1.5rem auto;
+        border-radius: 3px;
+    }
+
+    .logo-image-small { 
+        width: 90px;
+        margin-bottom: 1.5rem;
+        transition: transform 0.5s ease-in-out;
+    }
+    
+    .calculator-title {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      font-size: 3.4rem;
+      color: #fde8b0; 
+      text-shadow: 0 0 10px rgba(253, 232, 176, 0.3), 0 0 20px rgba(253, 232, 176, 0.2), 2px 2px 2px rgba(0,0,0,0.3); 
+      margin-bottom: 0.8rem;
+      letter-spacing: 1px;
+    }
+    .calculator-subtitle {
+        font-size: 1.6rem;
+        color: rgba(224, 224, 224, 0.8);
+        font-style: italic;
+    }
+
+    /* Stile Gruppi di Input */
+    .input-group {
+      background: rgba(20, 20, 20, 0.5); 
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .input-group:focus-within { 
+        box-shadow: 0 0 25px rgba(255, 77, 77, 0.3), 0 0 10px rgba(253, 232, 176, 0.2);
+        border-color: rgba(255, 77, 77, 0.5);
+    }
+
+    .group-label {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      font-size: 2rem;
+      color: #ff4d4d; 
+      margin-bottom: 1.8rem;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Pulsanti di Scelta */
+    .options-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .choice-button {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      background: transparent;
+      color: rgba(224, 224, 224, 0.7);
+      padding: 1.2rem 1.8rem; 
+      border-radius: 30px; 
+      border: 2px solid rgba(224, 224, 224, 0.3);
+      font-size: 1.4rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      position: relative;
+      overflow: hidden; 
+    }
+    .choice-button::before { 
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 77, 77, 0.2);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease;
+        z-index: 0;
+    }
+    .choice-button span { 
+        position: relative;
+        z-index: 1;
+    }
+    .choice-button:hover {
+      color: #fde8b0;
+      border-color: #ff4d4d;
+      transform: translateY(-3px) scale(1.05); 
+    }
+    .choice-button:hover::before {
+        width: 200%; 
+        height: 200%;
+    }
+    .choice-button.selected {
+      background: linear-gradient(135deg, #ff4d4d, #d43f00); 
+      color: #ffffff;
+      border-color: #fde8b0;
+      box-shadow: 0 0 15px rgba(255, 77, 77, 0.5), 0 0 5px rgba(253,232,176,0.3);
+      transform: scale(1.1);
+    }
+    .choice-button.selected::before { display: none; } 
+
+
+    /* Campi di Input Testo */
+    label.input-label {
+        display: block;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: rgba(224, 224, 224, 0.85);
+        margin-bottom: 0.8rem;
+        margin-top: 1.5rem;
+        transition: color 0.3s ease;
+    }
+    .input-group:focus-within label.input-label { 
+        color: #ff4d4d;
+    }
+
+    input[type="number"] {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      width: 100%;
+      background: rgba(10, 10, 10, 0.5); 
+      padding: 1.4rem;
+      border-radius: 10px;
+      font-size: 1.6rem;
+      color: #fde8b0;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 1rem;
+      appearance: none; 
+      -moz-appearance: textfield; 
+      transition: all 0.3s ease;
+    }
+    input[type="number"]::-webkit-outer-spin-button, 
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"]::placeholder {
+      color: rgba(224, 224, 224, 0.5);
+      font-style: italic;
+    }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: #ff4d4d; 
+      background-color: rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.3);
+      transform: scale(1.02); 
+    }
+
+    /* Pulsante di Calcolo */
+    .calculate-button-wrapper { 
+        text-align: center;
+        margin-top: 3.5rem;
+    }
+    .calculate-button {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      display: inline-flex; 
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff4d4d, #f09819); 
+      color: #ffffff;
+      font-size: 2rem;
+      font-weight: bold;
+      padding: 1.6rem 3.8rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1); 
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3), 0 4px 8px rgba(255, 77, 77, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+     .calculate-button::before { 
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s ease-in-out;
+    }
+    .calculate-button:hover::before {
+        left: 150%;
+    }
+    .calculate-button:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.4), 0 6px 12px rgba(255, 77, 77, 0.5);
+    }
+    .calculate-button:active {
+      transform: translateY(-1px) scale(0.98);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3), 0 2px 5px rgba(255, 77, 77, 0.3);
+    }
+    .calculate-button .icon {
+        margin-right: 1.2rem;
+        font-size: 2.2rem;
+        line-height: 1; 
+    }
+    .calculate-button .loading-indicator {
+        margin-left: 1rem;
+        font-size: 1.8rem; /* Per emoji spinner */
+    }
+
+
+    /* Box dei Risultati */
+    .output-box {
+      background: linear-gradient(145deg, rgba(50,50,50,0.9), rgba(30,30,30,0.95));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #e0e0e0;
+      border-radius: 20px;
+      padding: 3rem;
+      margin-top: 4rem;
+      text-align: left; 
+      display: none;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      animation: fadeInScaleUp 0.5s ease-out forwards; 
+    }
+    @keyframes fadeInScaleUp {
+        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .output-box h2 {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      font-size: 2.6rem;
+      color: #ff4d4d; 
+      margin-bottom: 2.5rem;
+      text-align: center;
+      border-bottom: 2px solid rgba(255, 77, 77, 0.3);
+      padding-bottom: 1rem;
+    }
+    .output-box p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem; 
+      margin-bottom: 1.2rem;
+      color: #e0e0e0;
+      display: flex; 
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed rgba(224,224,224,0.2);
+    }
+     .output-box p:last-of-type { /* Rimuove bordo per la nota */
+       border-bottom: none;
+    }
+     .output-box p .icon-result {
+        font-size: 2rem; /* Dimensione emoji */
+        margin-right: 1rem;
+        line-height: 1;
+    }
+    .output-box p .label { 
+        font-weight: 600;
+        color: rgba(224,224,224,0.8);
+        margin-right: auto; /* Spinge il valore a destra */
+    }
+    .output-box p .value { 
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      font-weight: bold;
+      color: #fde8b0; 
+      font-size: 2rem; 
+    }
+    .output-box .note {
+      font-style: italic;
+      color: rgba(255, 77, 77, 0.9);
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(224,224,224,0.1);
+      padding-top: 1.5rem;
+    }
+
+    /* Link per Tornare Indietro */
+    .back-link-container {
+      margin-top: 4rem; 
+      text-align: center;
+    }
+    .back-link {
+      font-family: 'Grobold', 'Fredoka', sans-serif;
+      color: rgba(253, 232, 176, 0.7);
+      font-size: 1.6rem;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid rgba(253, 232, 176, 0.3);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    .back-link:hover {
+      color: #ffffff;
+      background-color: rgba(255, 77, 77, 0.3);
+      border-color: #ff4d4d;
+      text-decoration: none;
+      transform: scale(1.05);
+    }
+
+    /* Media Queries per Responsività */
+    @media (max-width: 768px) {
+      body { padding: 1.5rem; }
+      .calculator-title { font-size: 2.8rem; }
+      .calculator-subtitle { font-size: 1.5rem; }
+      .calculator-wrapper { padding: 2.5rem 2rem; }
+      .group-label { font-size: 1.8rem; }
+      .choice-button { font-size: 1.3rem; padding: 1rem 1.5rem; }
+      input[type="number"] { font-size: 1.5rem; }
+      .calculate-button { font-size: 1.8rem; padding: 1.5rem 3rem; }
+      .output-box h2 { font-size: 2.2rem; }
+      .output-box p { font-size: 1.7rem; }
+      .output-box p .value { font-size: 1.9rem; }
+    }
+    @media (max-width: 480px) {
+      .calculator-title { font-size: 2.5rem; }
+      .calculator-wrapper { padding: 2rem 1.5rem; }
+      .options-container { gap: 0.8rem; }
+      .choice-button { min-width: auto; flex-grow: 1; font-size: 1.2rem; padding: 0.8rem 1rem;}
+      .input-group { padding: 1.5rem; }
+      .group-label { font-size: 1.7rem; }
+      .calculate-button { width: 95%; font-size: 1.7rem; }
+      .output-box { padding: 2rem 1.5rem; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="calculator-wrapper">
+    <header class="calculator-header">
+        <img src="logo.png" alt="Macrofy Logo" class="logo-image-small"/>
+        <h1 class="calculator-title">Calcolo PRO Macro</h1>
+        <p class="calculator-subtitle">Svela i macronutrienti perfetti per i tuoi obiettivi.</p>
+    </header>
+
+    <form id="macroForm">
+      <div class="input-group">
+        <h2 class="group-label">Chi Sei?</h2>
+        
+        <label class="input-label" for="genderOptions">Genere Biologico</label>
+        <div class="options-container" id="genderOptions">
+          <!-- Pulsanti generati da JS -->
+        </div>
+        
+        <label class="input-label" for="weight">Peso Attuale (kg)</label>
+        <input type="number" id="weight" placeholder="Es. 70" required min="30" max="250" />
+        
+        <label class="input-label" for="height">Altezza (cm)</label>
+        <input type="number" id="height" placeholder="Es. 175" required min="100" max="250" />
+        
+        <label class="input-label" for="age">Età (anni)</label>
+        <input type="number" id="age" placeholder="Es. 25 (min. 14)" required min="14" max="100" />
+      </div>
+
+      <div class="input-group">
+        <h2 class="group-label">Il Tuo Stile di Vita</h2>
+        
+        <label class="input-label" for="activityOptions">Livello Attività Quotidiana (esclusi allenamenti)</label>
+        <div class="options-container" id="activityOptions">
+          <!-- Pulsanti generati da JS -->
+        </div>
+        
+        <label class="input-label" for="frequencyOptions">Allenamenti Intensi a Settimana</label>
+        <div class="options-container" id="frequencyOptions">
+          <!-- Pulsanti generati da JS -->
+        </div>
+      </div>
+
+      <div class="input-group">
+        <h2 class="group-label">Il Tuo Obiettivo</h2>
+        
+        <label class="input-label" for="goalOptions">Cosa vuoi raggiungere?</label>
+        <div class="options-container" id="goalOptions">
+          <!-- Pulsanti generati da JS -->
+        </div>
+      </div>
+      
+      <div class="calculate-button-wrapper">
+        <button type="submit" class="calculate-button">
+          <span class="icon">🚀</span>
+          <span class="button-text">Svela i Miei Macro!</span>
+          <span class="loading-indicator" style="display: none;"></span>
+        </button>
+      </div>
+    </form>
+
+    <div class="output-box" id="resultBox">
+      <h2>I Tuoi Macro <span style="color: #fde8b0;">Target</span>:</h2>
+      <p><span id="calorieIcon" class="icon-result"></span><span id="calorie"></span></p>
+      <p><span id="proteinIcon" class="icon-result"></span><span id="protein"></span></p>
+      <p><span id="fatIcon" class="icon-result"></span><span id="fat"></span></p>
+      <p><span id="carbsIcon" class="icon-result"></span><span id="carbs"></span></p>
+      <p id="note" class="note"></p>
+    </div>
+  </div>
+
+  <div class="back-link-container">
+    <a href="index.html" class="back-link">← Torna alla Home</a>
+  </div>
+
+  <script>
+    // Dati per i pulsanti di scelta (invariati)
+    const genderData = [ {value: 'M', label: 'Uomo'}, {value: 'F', label: 'Donna'} ];
+    const activityData = [
+        {value: 'Sedentario', label: 'Sedentario'}, {value: 'Attivo', label: 'Attivo'}, {value: 'Molto attivo', label: 'Molto Attivo'}
+    ];
+    const frequencyData = [
+        {value: '1-2', label: '1-2'}, {value: '3-4', label: '3-4'}, {value: '5-6', label: '5-6'}, {value: '6+', label: '6+'}
+    ];
+    const goalData = [
+        {value: 'Dimagrimento', label: 'Perdita Peso'}, {value: 'Mantenimento', label: 'Mantenimento'}, {value: 'Aumento', label: 'Massa'}
+    ];
+
+    // Stato del form (invariato)
+    let formState = { gender: '', activity: '', frequency: '', goal: '' };
+
+    // Funzione per creare i pulsanti di scelta (invariata)
+    function createChoiceButtons(containerId, data, stateKey, clickHandler) {
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Errore critico: Container con ID '${containerId}' non trovato nell'HTML.`);
+            return;
+        }
+        container.innerHTML = '';
+        data.forEach(item => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'choice-button';
+            const span = document.createElement('span'); 
+            span.textContent = item.label;
+            button.appendChild(span);
+            button.dataset.value = item.value;
+            button.addEventListener('click', () => clickHandler(stateKey, item.value, containerId));
+            container.appendChild(button);
+        });
+    }
+    
+    // Gestore click per i bottoni di scelta (invariato)
+    function handleChoiceClick(stateKey, value, containerId) {
+        formState[stateKey] = value;
+        console.log(`Stato aggiornato: ${stateKey} = ${value}. formState completo:`, JSON.stringify(formState));
+        
+        const buttons = document.querySelectorAll(`#${containerId} .choice-button`);
+        buttons.forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.value === value);
+        });
+    }
+
+    // Popola i bottoni di scelta (invariato)
+    createChoiceButtons('genderOptions', genderData, 'gender', handleChoiceClick);
+    createChoiceButtons('activityOptions', activityData, 'activity', handleChoiceClick);
+    createChoiceButtons('frequencyOptions', frequencyData, 'frequency', handleChoiceClick);
+    createChoiceButtons('goalOptions', goalData, 'goal', handleChoiceClick);
+
+    // Elementi DOM
+    const form = document.getElementById("macroForm");
+    const resultBox = document.getElementById("resultBox");
+    const calcButton = form.querySelector('.calculate-button');
+    const buttonTextSpan = calcButton.querySelector('.button-text'); 
+    const originalButtonText = buttonTextSpan ? buttonTextSpan.textContent : "Svela i Miei Macro!";
+    const loadingIndicator = calcButton.querySelector('.loading-indicator');
+    
+    const calorieElement = document.getElementById("calorie");
+    const proteinElement = document.getElementById("protein");
+    const fatElement = document.getElementById("fat");
+    const carbsElement = document.getElementById("carbs");
+    const noteElement = document.getElementById("note");
+
+    const calorieIconEl = document.getElementById("calorieIcon");
+    const proteinIconEl = document.getElementById("proteinIcon");
+    const fatIconEl = document.getElementById("fatIcon");
+    const carbsIconEl = document.getElementById("carbsIcon");
+
+    const calorieIconText = "🔥";
+    const proteinIconText = "🥩";
+    const fatIconText = "🥑";
+    const carbsIconText = "🍚";
+
+    if (!form || !resultBox || !calcButton || !calorieElement || !proteinElement || !fatElement || !carbsElement || !noteElement) {
+        console.error("Errore critico: Uno o più elementi DOM fondamentali non sono stati trovati. Controlla gli ID nell'HTML.");
+    }
+
+    form.addEventListener("submit", async function(e) {
+      e.preventDefault();
+      console.log("--- Inizio Submit Form ---");
+      console.log("Stato formState al momento del submit:", JSON.stringify(formState));
+
+      if (calcButton) calcButton.disabled = true;
+      if (buttonTextSpan) buttonTextSpan.textContent = 'Calcolo...';
+      if (loadingIndicator) {
+          loadingIndicator.innerHTML = '⏳'; // Usiamo emoji come spinner
+          loadingIndicator.style.display = 'inline-block';
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 600)); 
+
+      const weight = parseFloat(document.getElementById("weight").value);
+      const height = parseFloat(document.getElementById("height").value);
+      const age = parseInt(document.getElementById("age").value);
+      const { gender, activity, frequency, goal } = formState;
+
+      console.log("Valori estratti per il calcolo:", { weight, height, age, gender, activity, frequency, goal });
+
+      let isValid = true;
+      let alertMessage = "";
+
+      if (!weight || !height || !age || !gender || !activity || !frequency || !goal) {
+        alertMessage = "Ehi! Compila tutti i campi e seleziona tutte le opzioni per scatenare la magia dei macro.";
+        isValid = false;
+      } else if (weight < 30 || weight > 250 || height < 100 || height > 250 || age < 14 || age > 100) {
+        alertMessage = "Ops! Controlla i valori di peso, altezza ed età. Devono essere realistici.";
+        isValid = false;
+      }
+
+      if (!isValid) {
+          alert(alertMessage);
+          if (calcButton) calcButton.disabled = false;
+          if (buttonTextSpan) buttonTextSpan.textContent = originalButtonText;
+          if (loadingIndicator) loadingIndicator.style.display = 'none';
+          console.log("Validazione fallita:", alertMessage);
+          console.log("--- Fine Submit Form (Fallito) ---");
+          return;
+      }
+
+      console.log("Dati validati, procedo con il calcolo...");
+
+      const multipliers = {
+        "Sedentario": { "1-2": 1.3, "3-4": 1.4, "5-6": 1.45, "6+": 1.5 },
+        "Attivo": { "1-2": 1.5, "3-4": 1.6, "5-6": 1.7, "6+": 1.75 },
+        "Molto attivo": { "1-2": 1.6, "3-4": 1.7, "5-6": 1.8, "6+": 1.9 }
+      };
+      const multiplier = multipliers[activity]?.[frequency] || 1.2;
+      let bmr = 10 * weight + 6.25 * height - 5 * age + (gender === 'M' ? 5 : -161);
+      let maintenanceCalories = bmr * multiplier;
+      let calorieAdjustment = 0;
+      if (goal === 'Dimagrimento') calorieAdjustment = -500;
+      else if (goal === 'Aumento') calorieAdjustment = 300;
+      
+      let targetCalories = maintenanceCalories + calorieAdjustment;
+      const minCalories = gender === 'F' ? 1300 : 1500;
+      let finalCalories = Math.round(targetCalories);
+      let noteText = "";
+
+      if (finalCalories < minCalories) {
+        finalCalories = minCalories;
+        noteText = ` Obiettivo calorico impostato al minimo di sicurezza (${minCalories} kcal). Per strategie diverse, consulta un nutrizionista.`;
+      }
+
+      const proteinPerKg = goal === 'Aumento' ? 2.1 : 1.9;
+      const fatPerKgMin = 0.8; 
+      
+      let protein = Math.round(weight * proteinPerKg);
+      let fat = Math.round(weight * fatPerKgMin);
+      
+      let caloriesFromProteinAndFat = (protein * 4) + (fat * 9);
+      let remainingCaloriesForCarbs = finalCalories - caloriesFromProteinAndFat;
+      let carbs = Math.round(remainingCaloriesForCarbs / 4);
+
+      if (carbs < 50) {
+          carbs = 50;
+          remainingCaloriesForCarbs = finalCalories - (protein * 4) - (carbs * 4);
+          fat = Math.round(remainingCaloriesForCarbs / 9);
+          if (fat < weight * 0.6) { 
+             noteText += (noteText ? " " : "") + " Raggiungere i target proteici e un minimo di carboidrati con queste calorie è complesso. Valori di grassi bassi. Consulta un esperto.";
+          } else {
+             noteText += (noteText ? " " : "") + " Carboidrati impostati a 50g min. Grassi ricalcolati.";
+          }
+      }
+      
+      protein = Math.round(protein / 5) * 5;
+      fat = Math.round(fat / 5) * 5;
+      carbs = Math.round(carbs / 5) * 5;
+      finalCalories = (protein * 4) + (fat * 9) + (carbs * 4);
+
+      console.log("Risultati calcolati:", { finalCalories, protein, fat, carbs, noteText });
+
+      // Popola i risultati
+      if (calorieIconEl) calorieIconEl.textContent = calorieIconText;
+      if (calorieElement) calorieElement.innerHTML = `<span class="label">Calorie:</span> <span class="value">${finalCalories} kcal</span>`;
+      
+      if (proteinIconEl) proteinIconEl.textContent = proteinIconText;
+      if (proteinElement) proteinElement.innerHTML = `<span class="label">Proteine:</span> <span class="value">${protein}g (${(protein*4/finalCalories*100).toFixed(0)}%)</span>`;
+      
+      if (fatIconEl) fatIconEl.textContent = fatIconText;
+      if (fatElement) fatElement.innerHTML = `<span class="label">Grassi:</span> <span class="value">${fat}g (${(fat*9/finalCalories*100).toFixed(0)}%)</span>`;
+      
+      if (carbsIconEl) carbsIconEl.textContent = carbsIconText;
+      if (carbsElement) carbsElement.innerHTML = `<span class="label">Carboidrati:</span> <span class="value">${carbs}g (${(carbs*4/finalCalories*100).toFixed(0)}%)</span>`;
+      
+      if (noteElement) noteElement.textContent = noteText.trim();
+
+      if (resultBox) {
+          resultBox.style.display = "block";
+          console.log("Box risultati reso visibile.");
+          setTimeout(() => { 
+              resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+      } else {
+          console.error("Errore: Elemento resultBox non trovato per mostrare i risultati.");
+      }
+      
+      if (calcButton) calcButton.disabled = false;
+      if (buttonTextSpan) buttonTextSpan.textContent = originalButtonText;
+      if (loadingIndicator) loadingIndicator.style.display = 'none';
+
+      console.log("--- Fine Submit Form (Successo) ---");
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!form) console.error("Form con ID 'macroForm' non trovato!");
+        if (!resultBox) console.error("Elemento con ID 'resultBox' non trovato!");
+        if (!buttonTextSpan && calcButton) console.warn("Span con classe '.button-text' non trovato dentro il pulsante di calcolo.");
+    });
+  </script>
+</body>
+</html>

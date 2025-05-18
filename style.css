@@ -1,0 +1,272 @@
+/* GLOBAL RESETS & BASE STYLES */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 62.5%; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.7;
+  color: #e0e1e6; /* Testo principale chiaro (quasi bianco) */
+  background-color: #121212; /* Sfondo MOLTO scuro, quasi nero */
+  position: relative; /* Per lo sfondo video */
+  overflow-x: hidden;
+}
+
+/* VIDEO BACKGROUND (OPZIONALE) */
+.site-bg-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -2; /* Dietro tutto */
+  overflow: hidden;
+}
+#background-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Copre l'intera area */
+}
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(18, 18, 18, 0.8); /* Overlay scuro per leggibilità testo */
+  z-index: -1;
+}
+/* Se non usi il video, il body avrà background-color: #121212; */
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Grobold', 'Fredoka', sans-serif;
+  font-weight: bold;
+  line-height: 1.25;
+  color: #fde8b0; /* Giallo paglierino Macrofy per i titoli */
+  letter-spacing: 0.5px;
+}
+p { margin-bottom: 1.8rem; color: #b0b3c0; /* Testo grigio chiaro per leggibilità */ }
+a { color: #ff6b6b; /* Rosso/corallo per i link */ text-decoration: none; transition: color 0.25s ease, text-shadow 0.25s ease; }
+a:hover, a:focus { color: #ff8787; text-decoration: none; text-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+img { max-width: 100%; height: auto; display: block; }
+ul, ol { list-style-position: outside; padding-left: 2em; }
+ol li, ul li { margin-bottom: 1rem; }
+
+/* @font-face per Grobold (DA AGGIUNGERE SE HAI I FILE) */
+@font-face {
+  font-family: 'Grobold';
+  src: url('fonts/grobold.woff2') format('woff2'), /* Assicurati che il percorso sia corretto */
+       url('fonts/grobold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* UTILITIES */
+.container { width: 90%; max-width: 1050px; margin: 0 auto; padding: 0 1.5rem; }
+.text-center { text-align: center; }
+.section-padding { padding: 8rem 0; }
+.highlight-accent { color: #ff6b6b; /* Rosso/corallo per highlights */ font-weight: bold; }
+
+/* CONTENT BOX STYLE (per sezioni su sfondo video/scuro) */
+.content-box {
+  background: rgba(28, 28, 30, 0.85); /* Sfondo box scuro semi-trasparente */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 4rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative; /* Per effetti futuri */
+}
+
+/* HEADER */
+.site-header {
+  padding: 2.5rem 0;
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(18, 18, 18, 0.7); /* Header semi-trasparente */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+}
+.header-content { display: flex; flex-direction: column; align-items: center; }
+.logo-image { width: 120px; margin-bottom: 1.5rem; }
+.animated-logo { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.animated-logo:hover { transform: scale(1.1) rotate(-5deg); }
+
+.hero-main-text { text-align: center; }
+.main-title-glow {
+  font-size: 5.5rem; /* Più grande! */
+  color: #fde8b0;
+  text-shadow: 0 0 8px rgba(253, 232, 176, 0.5), 0 0 15px rgba(253, 232, 176, 0.4), 0 0 25px rgba(253, 232, 176, 0.3),
+               3px 3px 2px rgba(0,0,0,0.5); /* Effetto glow + ombra netta */
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+.hero-subtitle { font-family: 'Montserrat', sans-serif; font-size: 2rem; color: #c0c3cf; font-weight: 500; }
+
+/* SECTION TITLES & SUBTITLES */
+.section-title { font-size: 3.8rem; margin-bottom: 1.2rem; color: #fde8b0; text-shadow: 2px 2px 1px rgba(0,0,0,0.4); }
+.section-subtitle { font-family: 'Montserrat', sans-serif; font-size: 1.9rem; color: #a0a3b0; max-width: 700px; margin: 0 auto 4.5rem auto; line-height: 1.7; }
+.section-description { font-size: 1.8rem; max-width: 750px; margin: 0 auto 2rem auto; color: #b0b3c0; }
+
+/* FEATURES SECTION */
+.features-section { background-color: rgba(22,22,22,0.5); /* Sfondo sezione leggermente diverso */ }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem; }
+.feature-card {
+  background: linear-gradient(145deg, rgba(40,40,42,0.9), rgba(30,30,32,0.95));
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  padding: 3rem 2.5rem; border-radius: 18px; text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  transform-style: preserve-3d; /* Per effetto 3D hover */
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.feature-card:hover {
+  transform: translateY(-10px) perspective(1000px) rotateX(5deg) rotateY(-3deg); /* Effetto 3D all'hover */
+  box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,107,107,0.2);
+}
+.feature-icon { font-size: 4.2rem; margin-bottom: 1.8rem; color: #ff6b6b; line-height: 1; }
+.feature-title { font-size: 2.2rem; color: #f0f2f5; margin-bottom: 1.2rem; }
+.feature-card p { font-size: 1.5rem; color: #9ea2b0; margin-bottom: 0; }
+
+/* CTA BANNER SECTION */
+.cta-banner-title { font-size: 3.2rem; margin-bottom: 1rem; }
+.cta-banner-subtitle { font-size: 1.8rem; margin-bottom: 3.5rem; color: #b0b3c0; }
+
+/* SHINE BUTTON EFFECT (per i CTA principali) */
+.shine-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  /* Stili base del bottone (colore, padding, etc.) sono definiti in .cta-button */
+}
+.shine-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%; /* Parte da fuori a sinistra */
+  width: 80%; /* Larghezza del "fascio di luce" */
+  height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-25deg); /* Inclina il fascio */
+  transition: left 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 2; /* Sopra il testo del bottone se necessario */
+}
+.shine-button:hover::before {
+  left: 150%; /* Fa scorrere il fascio attraverso il bottone */
+}
+.shine-button span { /* Assicura che il testo sia sopra l'effetto ::before */
+    position: relative;
+    z-index: 3;
+}
+
+/* MAIN CTA BUTTON */
+.cta-button {
+  font-family: 'Grobold', 'Fredoka', sans-serif;
+  font-size: 1.9rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6b6b, #ee3b3b); /* Gradiente rosso/corallo */
+  padding: 1.6rem 3.8rem;
+  border-radius: 50px;
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 0px #c73f3f, 0 10px 20px rgba(0,0,0,0.3), inset 0 -2px 5px rgba(0,0,0,0.2);
+  border: none; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.cta-button .button-icon { margin-right: 1rem; font-size: 2.2rem; line-height: 1; }
+.cta-button:hover, .cta-button:focus {
+  background: linear-gradient(135deg, #ff8787, #ff5b5b);
+  color: #ffffff; transform: translateY(-3px);
+  box-shadow: 0 9px 0px #c73f3f, 0 14px 28px rgba(0,0,0,0.35), inset 0 -2px 5px rgba(0,0,0,0.1);
+  text-decoration: none;
+}
+.cta-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0px #c73f3f, 0 6px 12px rgba(0,0,0,0.3), inset 0 -1px 3px rgba(0,0,0,0.2);
+}
+
+
+/* SCREENSHOTS SECTION */
+.screenshots-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2.5rem; margin-top: 3rem; }
+.screenshot-item {
+    background: rgba(30,30,32,0.8);
+    border-radius: 18px; overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.screenshot-item:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 12px 35px rgba(0,0,0,0.5); }
+.screenshot-image { border-radius: 0; border: none; box-shadow: none; /* Lo stile è sul .screenshot-item ora */ }
+
+/* DOWNLOAD (TESTFLIGHT) & SOCIAL SECTIONS */
+.testflight-instructions {
+  background-color: rgba(40,40,42, 0.7);
+  padding: 2.5rem; border-radius: 15px; margin: 3rem auto; max-width: 600px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.testflight-instructions p strong { color: #fde8b0; }
+.testflight-instructions ol { margin-top: 1.5rem; padding-left: 2.5rem; }
+.testflight-instructions li { margin-bottom: 1.2rem; font-size: 1.6rem; color: #b0b3c0; }
+
+/* FOOTER */
+.site-footer {
+  background: #0a0a0a; /* Footer ancora più scuro */
+  color: #888a93; padding: 5rem 0 3rem 0; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer-logo { width: 70px; margin-bottom: 1.5rem; opacity: 0.6; filter: grayscale(50%); transition: opacity 0.3s, filter 0.3s; }
+.footer-logo:hover { opacity: 1; filter: grayscale(0%); }
+.copyright-text { font-size: 1.4rem; margin-bottom: 1rem; }
+.footer-highlight { color: #ff6b6b; }
+.footer-nav { margin-top: 1rem; }
+.footer-nav a { color: #a0a3b0; margin: 0 1rem; font-size: 1.3rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.footer-nav a:hover { color: #ffffff; }
+
+/* RESPONSIVE STYLES */
+@media (max-width: 992px) { /* Tablet */
+    .main-title-glow { font-size: 4.8rem; }
+    .hero-subtitle { font-size: 1.9rem; }
+    .section-title { font-size: 3.4rem; }
+    .section-subtitle { font-size: 1.8rem; }
+    .content-box { padding: 3rem; }
+    .features-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+@media (max-width: 768px) { /* Tablet piccoli e mobile landscape */
+  html { font-size: 58%; }
+  .section-padding { padding: 6rem 0; }
+  .logo-image { width: 100px; }
+  .main-title-glow { font-size: 4rem; }
+  .hero-subtitle { font-size: 1.7rem; }
+  .section-title { font-size: 3rem; }
+  .section-subtitle { font-size: 1.7rem; margin-bottom: 3.5rem; }
+  .content-box { padding: 2.5rem; }
+  .feature-card { padding: 2.5rem 2rem; }
+  .feature-title { font-size: 2rem; }
+  .cta-button { font-size: 1.8rem; padding: 1.5rem 3.2rem; }
+  .screenshots-grid { grid-template-columns: 1fr 1fr; /* Due screenshot per riga */ }
+}
+
+@media (max-width: 576px) { /* Smartphone */
+  html { font-size: 55%; }
+  body { padding-bottom: 2rem; /* Spazio per footer non sticky */ }
+  .site-header { padding: 2rem 0; position: static; /* Header non sticky su mobile per più spazio */ }
+  .logo-image { width: 90px; }
+  .main-title-glow { font-size: 3.2rem; letter-spacing: 0.5px; text-shadow: 0 0 6px rgba(253,232,176,0.4), 0 0 12px rgba(253,232,176,0.3), 2px 2px 1px rgba(0,0,0,0.3); }
+  .hero-subtitle { font-size: 1.6rem; }
+  .section-title { font-size: 2.6rem; }
+  .section-subtitle { font-size: 1.6rem; }
+  .content-box { padding: 2rem 1.5rem; border-radius: 15px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .cta-banner-title { font-size: 2.4rem; }
+  .cta-button { width: 90%; max-width: 320px; padding: 1.5rem 1.5rem; font-size: 1.6rem; }
+  .cta-button .button-icon { font-size: 2rem; }
+  .screenshots-grid { grid-template-columns: 1fr; gap: 2rem; } /* Screenshot uno sotto l'altro */
+  .testflight-instructions { padding: 2rem 1.5rem; }
+  .testflight-instructions li { font-size: 1.5rem; }
+  .site-footer { padding: 4rem 0 2rem 0; }
+  .footer-logo { width: 60px; }
+}
